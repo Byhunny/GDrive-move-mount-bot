@@ -1,17 +1,21 @@
 package services
 
 import (
-	"fmt"
+	"os/exec"
 	"time"
-
-	"github.com/Byhunny/GDrive-move-mount-bot/models/models"
 )
 
-func Mount(models.Var) string {
-	time.Sleep(1 * time.Second)
-	fmt.Println(models.Files, models.Index, models.Rclonename)
+func Mount(Index [2]string, Files [2]string, Rclonename string) string {
 
-	result := "Mount are Done!"
-	return result
+	_ = exec.Command("fusermount -uz /" + Files[0])
+	time.Sleep(1 * time.Second)
+	_ = exec.Command("fusermount -uz /" + Files[1])
+	time.Sleep(1 * time.Second)
+	_ = exec.Command("rclone mount " + Rclonename + ":/Sch/sc" + Index[0] + " /" + Files[0] + " --vfs-read-chunk-size=128k --poll-interval=1h --dir-cache-time=2h --buffer-size=0 --cache-dir /mnt/temp --vfs-cache-mode full --no-checksum --no-modtime --read-only --vfs-read-wait 0 --max-read-ahead 0 --use-mmap --fast-list --checkers 2 --no-check-certificate --multi-thread-cutoff 0 --multi-thread-streams 2 --vfs-cache-max-age 10000h -q --use-cookies --daemon")
+	time.Sleep(1 * time.Second)
+	_ = exec.Command("rclone mount " + Rclonename + ":/Sch/sc" + Index[1] + " /" + Files[1] + " --vfs-read-chunk-size=128k --poll-interval=1h --dir-cache-time=2h --buffer-size=0 --cache-dir /mnt/temp --vfs-cache-mode full --no-checksum --no-modtime --read-only --vfs-read-wait 0 --max-read-ahead 0 --use-mmap --fast-list --checkers 2 --no-check-certificate --multi-thread-cutoff 0 --multi-thread-streams 2 --vfs-cache-max-age 10000h -q --use-cookies --daemon")
+	time.Sleep(1 * time.Second)
+
+	return "Mount are Done!"
 
 }
